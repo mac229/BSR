@@ -1,4 +1,7 @@
-package bsr;
+package bsr.client;
+
+import bsr.Person;
+import bsr.PersonService;
 
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
