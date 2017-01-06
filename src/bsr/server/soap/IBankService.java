@@ -1,11 +1,17 @@
 package bsr.server.soap;
 
+import bsr.server.exception.TooSmallBalance;
 import bsr.server.model.Account;
+import bsr.server.model.Bill;
+import bsr.server.model.Payment;
+import bsr.server.model.Transfer;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.xml.ws.BindingType;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Maciej on 2016-12-27.
@@ -26,4 +32,19 @@ public interface IBankService {
 
     @WebMethod
     public Account[] getAccounts();
+
+    @WebMethod
+    public boolean login(String login, String password);
+
+    @WebMethod
+    public ArrayList<Bill> getBiils(long accountId);
+
+    @WebMethod
+    public double paymentIn(Payment payment);
+
+    @WebMethod
+    public double paymentOut(Payment payment) throws TooSmallBalance;
+
+    @WebMethod
+    public double transfer(Transfer transfer) throws TooSmallBalance;
 }

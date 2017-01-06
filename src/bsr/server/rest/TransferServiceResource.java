@@ -11,13 +11,12 @@ import javax.ws.rs.core.MediaType;
  * Created by Maciej on 2017-01-06.
  */
 @Path("/transfer")
-public class TransferResource {
+public class TransferServiceResource {
 
     // This method is called if XMLis request
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Transfer getXML() {
-        Transfer transfer = new Transfer();
-        return transfer;
+    public Transfer getTransfer() {
+        return new Transfer("title", 100, "sender", "receiver");
     }
 }

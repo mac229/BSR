@@ -1,14 +1,13 @@
 package bsr.server.model;
 
 import javax.validation.constraints.NotNull;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.*;
 
 /**
  * Created by Maciej on 2017-01-06.
  */
 @XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Transfer {
 
     @XmlElement(name = "title")
@@ -21,7 +20,7 @@ public class Transfer {
     private String sender;
 
     @XmlElement(name = "receiver_account")
-    protected String receiver;
+    private String receiver;
 
     public Transfer() {
     }

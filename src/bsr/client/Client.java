@@ -50,4 +50,8 @@ public class Client {
         Account account = new Account(1, "admin", "admin");
         System.out.println("Add account status=" + bankService.addAccount(account));
     }
+
+    public boolean login(String login, String password) {
+        return bankService.login(login, password);
+    }
 }
