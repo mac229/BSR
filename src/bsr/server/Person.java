@@ -1,4 +1,4 @@
-package bsr;
+package bsr.server;
 
 import java.io.Serializable;
 
@@ -7,11 +7,26 @@ import java.io.Serializable;
  */
 public class Person implements Serializable {
 
-    private static final long serialVersionUID = -5577579081118070434L;
-
+    private int id;
     private String name;
     private int age;
-    private int id;
+
+    public Person() {
+    }
+
+    public Person(int id, String name, int age) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -27,14 +42,6 @@ public class Person implements Serializable {
 
     public void setAge(int age) {
         this.age = age;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     @Override

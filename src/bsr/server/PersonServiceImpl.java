@@ -1,4 +1,4 @@
-package bsr;
+package bsr.server;
 
 import javax.jws.WebService;
 import java.util.HashMap;
@@ -8,7 +8,7 @@ import java.util.Set;
 /**
  * Created by Maciej on 2016-12-27.
  */
-@WebService(endpointInterface = "bsr.PersonService")
+@WebService(endpointInterface = "bsr.server.PersonService")
 public class PersonServiceImpl implements PersonService {
 
     private static Map<Integer, Person> persons = new HashMap<Integer, Person>();
