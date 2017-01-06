@@ -1,9 +1,14 @@
 package bsr.server;
 
 import bsr.Constants;
+import bsr.server.soap.BankService;
+import org.glassfish.grizzly.http.server.HttpServer;
+import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 
+import javax.ws.rs.core.UriBuilder;
 import javax.xml.ws.Endpoint;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
 
 /**
@@ -12,7 +17,12 @@ import java.net.URISyntaxException;
 public class Server {
 
     public static void main(String[] args) throws IOException, URISyntaxException {
-        Endpoint.publish(Constants.PERSON_ENPDOINT, new PersonServiceImpl());
-        System.out.println("Started");
+        Endpoint.publish(Constants.BANK_ENPDOINT, new BankService());
+
+        URI baseUri = UriBuilder.fromUri(Constants.LOCALHOST).port(Constants.REST_PORT).build();
+        MyResourceConfig config = new MyResourceConfig();
+        HttpServer httpServer = GrizzlyHttpServerFactory.createHttpServer(baseUri, config);
+
+        httpServer.start();
     }
 }

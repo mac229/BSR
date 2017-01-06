@@ -1,6 +1,5 @@
 package bsr.client.ui;
 
-import bsr.client.Client;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -35,12 +34,7 @@ public class LoginController {
         System.out.println(loginText.getText());
         System.out.println(passwordText.getText());
 
-        Client.getInstance().add();
-        Client.getInstance().getAll();
-        Client.getInstance().get();
-        Client.getInstance().delete();
-        Client.getInstance().getAll();
-        //showHome(event);
+        showHome(event);
     }
 
     private void showHome(ActionEvent event) throws IOException {

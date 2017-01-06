@@ -1,8 +1,8 @@
 package bsr.client;
 
 import bsr.Constants;
-import bsr.server.Person;
-import bsr.server.PersonService;
+import bsr.server.model.Account;
+import bsr.server.soap.IBankService;
 
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
@@ -16,7 +16,7 @@ import java.util.Arrays;
 public class Client {
 
     private static Client client = new Client();
-    private PersonService personService;
+    private IBankService bankService;
 
     public static Client getInstance() {
         return client;
@@ -25,37 +25,29 @@ public class Client {
     public void init() {
 
         try {
-            URL wsdlURL = new URL(Constants.PERSON_ENDPOINT_WSDL);
+            URL wsdlURL = new URL(Constants.BANK_ENDPOINT_WSDL);
             QName qname = new QName(Constants.NAMESPACE_URI, Constants.PERSON_SERVICE_NAME);
             Service service = Service.create(wsdlURL, qname);
-            personService = service.getPort(PersonService.class);
+            bankService = service.getPort(IBankService.class);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
     }
 
     public void delete() {
-        //delete person
-        System.out.println("Delete Person Status=" + personService.deletePerson(2));
+        System.out.println("Delete Person Status=" + bankService.deleteAccount(1));
     }
 
     public void get() {
-        //get person
-        System.out.println(personService.getPerson(1));
+        System.out.println(bankService.getAccount(1));
     }
 
     public void getAll() {
-        //get all persons
-        System.out.println(Arrays.asList(personService.getAllPersons()));
+        System.out.println(Arrays.asList(bankService.getAccounts()));
     }
 
     public void add() {
-        Person p1 = new Person(1, "Pankaj", 30);
-        Person p2 = new Person(2, "Meghna", 25);
-
-        //add person
-        System.out.println("Add Person Status=" + personService.addPerson(p1));
-        System.out.println("Add Person Status=" + personService.addPerson(p2));
+        Account account = new Account(1, "admin", "admin");
+        System.out.println("Add account status=" + bankService.addAccount(account));
     }
-
 }
