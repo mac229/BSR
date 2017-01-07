@@ -1,5 +1,10 @@
 package bsr.client.ui;
 
+import bsr.Constants;
+import bsr.client.Client;
+import bsr.server.exception.NotFound;
+import bsr.server.exception.TooSmallBalance;
+import bsr.server.model.Payment;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -25,12 +30,30 @@ public class PaymentController {
 
     @FXML
     protected void onPaymentOutClick(ActionEvent event) throws IOException {
-        System.out.println(amountText.getText());
+        try {
+            double amount = Double.parseDouble(amountText.getText());
+            Payment payment = new Payment(amount, "dsa");
+            Client.getInstance().getBankService().paymentOut(payment);
+        } catch (NumberFormatException ignored) {
+            resultText.setText("Nieprawidłowa wartość");
+        } catch (NotFound notFound) {
+            resultText.setText("Nie znaleziono konta");
+        } catch (TooSmallBalance tooSmallBalance) {
+            resultText.setText("Za małe saldo");
+        }
     }
 
     @FXML
     protected void onPaymentInClick(ActionEvent event) throws IOException {
-        System.out.println(amountText.getText());
+        try {
+            double amount = Double.parseDouble(amountText.getText());
+            Payment payment = new Payment(amount, "dsa");
+            Client.getInstance().getBankService().paymentIn(payment);
+        } catch (NumberFormatException ignored) {
+            resultText.setText("Nieprawidłowa wartość");
+        } catch (NotFound notFound) {
+            resultText.setText("Nie znaleziono konta");
+        }
     }
 
     @FXML

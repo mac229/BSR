@@ -1,10 +1,9 @@
 package bsr.server.soap;
 
+import bsr.Constants;
+import bsr.server.exception.NotFound;
 import bsr.server.exception.TooSmallBalance;
-import bsr.server.model.Account;
-import bsr.server.model.Bill;
-import bsr.server.model.Payment;
-import bsr.server.model.Transfer;
+import bsr.server.model.*;
 
 import javax.jws.WebService;
 import java.util.*;
@@ -16,7 +15,14 @@ import java.util.*;
 public class BankService implements IBankService {
 
     private static Map<Long, Account> accounts = new HashMap<>();
-    private static List<Bill> bills = new ArrayList<>();
+    private static ArrayList<Bill> bills = new ArrayList<>();
+    private static ArrayList<HistoryTransfer> transactions = new ArrayList<>();
+
+    public BankService() {
+        Account account = new Account(1, "admin", "admin");
+        Bill bill = new Bill("99001097820000000000000001", 1000);
+        account.addBill(bill);
+    }
 
     @Override
     public boolean addAccount(Account account) {
@@ -56,35 +62,76 @@ public class BankService implements IBankService {
     }
 
     @Override
-    public boolean login(String login, String password) {
+    public long login(String login, String password) {
         for (Account account : accounts.values()) {
             if (login.equals(account.getLogin()) && password.equals(account.getPassword())) {
-                return true;
+                return account.getId();
             }
         }
-        return false;
+        return Constants.UNDEFINED;
     }
 
     @Override
-    public ArrayList<Bill> getBiils(long accountId) {
-        return null;
+    public ArrayList<Bill> getBills(long accountId) {
+        return bills;
     }
 
     @Override
-    public double paymentIn(Payment payment) {
+    public Bill getBill(String billNumber) throws NotFound {
         for (Bill bill : bills) {
-            if (bill.get)
+            if (bill.getNumber().equals(billNumber)) {
+                return bill;
+            }
         }
+
+        throw new NotFound();
+    }
+
+    @Override
+    public double paymentIn(Payment payment) throws NotFound {
+        for (Bill bill : bills) {
+            if (bill.getNumber().equals(payment.getBillNumber())) {
+                double newBalance = bill.getBalance() + payment.getAmount();
+                bill.setBalance(newBalance);
+                return newBalance;
+            }
+        }
+
+        throw new NotFound();
+    }
+
+    @Override
+    public double paymentOut(Payment payment) throws TooSmallBalance, NotFound {
+        for (Bill bill : bills) {
+            if (bill.getNumber().equals(payment.getBillNumber())) {
+                double balance = bill.getBalance();
+                if (balance - payment.getAmount() < 0) {
+                    throw new TooSmallBalance();
+                } else {
+                    double newBalance = bill.getBalance() - payment.getAmount();
+                    bill.setBalance(newBalance);
+                    return newBalance;
+                }
+            }
+        }
+
+        throw new NotFound();
+    }
+
+    @Override
+    public double transfer(Transfer transfer) throws TooSmallBalance, NotFound {
         return 0;
     }
 
     @Override
-    public double paymentOut(Payment payment) throws TooSmallBalance {
-        return 0;
-    }
+    public ArrayList<HistoryTransfer> getHistoryTransfers(String billNumber) throws NotFound {
+        ArrayList<HistoryTransfer> result = new ArrayList<>();
+        for (HistoryTransfer transaction : transactions) {
+            if (transaction.getBillNumber().equals(billNumber)) {
+                result.add(transaction);
+            }
+        }
 
-    @Override
-    public double transfer(Transfer transfer) throws TooSmallBalance {
-        return 0;
+        return result;
     }
 }

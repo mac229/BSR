@@ -1,5 +1,8 @@
 package bsr.client.ui;
 
+import bsr.client.Client;
+import bsr.server.exception.NotFound;
+import bsr.server.model.HistoryTransfer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,6 +15,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 /**
@@ -24,7 +28,14 @@ public class HistoryController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        listView.getItems().add("ble ble ble");
+        try {
+            ArrayList<HistoryTransfer> history = Client.getInstance().getHistory();
+            for (HistoryTransfer transfer : history) {
+                listView.getItems().addAll(transfer.toString());
+            }
+        } catch (NotFound notFound) {
+            listView.getItems().add("Nie znaleziono rachunku");
+        }
     }
 
     @FXML

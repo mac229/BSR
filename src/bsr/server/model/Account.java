@@ -55,6 +55,10 @@ public class Account {
         this.bills = bills;
     }
 
+    public void addBill(Bill bill) {
+        bills.add(bill);
+    }
+
     @Override
     public String toString() {
         return "id=" + id +

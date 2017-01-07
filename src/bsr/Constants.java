@@ -17,4 +17,5 @@ public class Constants {
     public static final String PERSON_SERVICE_NAME = BankService.class.getSimpleName() + "Service";
 
     public static final String BANK_CREDENTIALS = "admin:admin";
+    public static final long UNDEFINED = -1;
 }

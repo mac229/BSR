@@ -34,10 +34,14 @@ public class LoginController {
         String login = loginText.getText();
         String password = passwordText.getText();
 
-        boolean result = Client.getInstance().login(login, password);
-        resultText.setText(String.valueOf(result));
-        if (result) {
+        Client client = Client.getInstance();
+        long accountId = client.getBankService().login(login, password);
+        client.getBills(accountId);
+
+        if (accountId >= 0) {
             showHome(event);
+        } else {
+            resultText.setText("Nieprawidłowe dane logowania");
         }
     }
 

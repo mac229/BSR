@@ -1,13 +1,17 @@
 package bsr.client;
 
 import bsr.Constants;
+import bsr.server.exception.NotFound;
 import bsr.server.model.Account;
+import bsr.server.model.Bill;
+import bsr.server.model.HistoryTransfer;
 import bsr.server.soap.IBankService;
 
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -17,13 +21,14 @@ public class Client {
 
     private static Client client = new Client();
     private IBankService bankService;
+    private ArrayList<Bill> bills;
+    private Bill bill;
 
     public static Client getInstance() {
         return client;
     }
 
     public void init() {
-
         try {
             URL wsdlURL = new URL(Constants.BANK_ENDPOINT_WSDL);
             QName qname = new QName(Constants.NAMESPACE_URI, Constants.PERSON_SERVICE_NAME);
@@ -34,24 +39,16 @@ public class Client {
         }
     }
 
-    public void delete() {
-        System.out.println("Delete Person Status=" + bankService.deleteAccount(1));
+    public IBankService getBankService(){
+        return bankService;
     }
 
-    public void get() {
-        System.out.println(bankService.getAccount(1));
+    public void getBills(long accountId) {
+        bills = bankService.getBills(accountId);
+        bill = bills.get(0);
     }
 
-    public void getAll() {
-        System.out.println(Arrays.asList(bankService.getAccounts()));
-    }
-
-    public void add() {
-        Account account = new Account(1, "admin", "admin");
-        System.out.println("Add account status=" + bankService.addAccount(account));
-    }
-
-    public boolean login(String login, String password) {
-        return bankService.login(login, password);
+    public ArrayList<HistoryTransfer> getHistory() throws NotFound {
+        return bankService.getHistoryTransfers(bill.getNumber());
     }
 }

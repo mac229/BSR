@@ -1,17 +1,14 @@
 package bsr.server.soap;
 
+import bsr.server.exception.NotFound;
 import bsr.server.exception.TooSmallBalance;
-import bsr.server.model.Account;
-import bsr.server.model.Bill;
-import bsr.server.model.Payment;
-import bsr.server.model.Transfer;
+import bsr.server.model.*;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.xml.ws.BindingType;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Maciej on 2016-12-27.
@@ -25,7 +22,7 @@ public interface IBankService {
     public boolean addAccount(Account account);
 
     @WebMethod
-    public boolean deleteAccount(long id);
+    public boolean deleteAccount(long id) throws NotFound;
 
     @WebMethod
     public Account getAccount(long id);
@@ -34,17 +31,23 @@ public interface IBankService {
     public Account[] getAccounts();
 
     @WebMethod
-    public boolean login(String login, String password);
+    public long login(String login, String password);
 
     @WebMethod
-    public ArrayList<Bill> getBiils(long accountId);
+    public ArrayList<Bill> getBills(long accountId);
 
     @WebMethod
-    public double paymentIn(Payment payment);
+    public Bill getBill(String billNumber) throws NotFound;
 
     @WebMethod
-    public double paymentOut(Payment payment) throws TooSmallBalance;
+    public double paymentIn(Payment payment) throws NotFound;
 
     @WebMethod
-    public double transfer(Transfer transfer) throws TooSmallBalance;
+    public double paymentOut(Payment payment) throws TooSmallBalance, NotFound;
+
+    @WebMethod
+    public double transfer(Transfer transfer) throws TooSmallBalance, NotFound;
+
+    @WebMethod
+    public ArrayList<HistoryTransfer> getHistoryTransfers(String billNumber) throws NotFound;
 }
