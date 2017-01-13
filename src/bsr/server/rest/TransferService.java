@@ -11,7 +11,7 @@ import javax.ws.rs.core.MediaType;
  * Created by Maciej on 2017-01-06.
  */
 @Path("/transfer")
-public class TransferServiceResource {
+public class TransferService {
 
     // This method is called if XMLis request
     @GET
