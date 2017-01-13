@@ -1,7 +1,9 @@
 package bsr.server.model;
 
-import javax.validation.constraints.NotNull;
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Created by Maciej on 2017-01-06.
@@ -62,5 +64,13 @@ public class Transfer {
 
     public void setReceiver(String receiver) {
         this.receiver = receiver;
+    }
+
+    @Override
+    public String toString() {
+        return "title=" + title +
+                ", amount=" + amount +
+                ", sender=" + sender +
+                ", receiver=" + receiver;
     }
 }

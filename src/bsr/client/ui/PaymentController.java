@@ -32,7 +32,7 @@ public class PaymentController {
     protected void onPaymentOutClick(ActionEvent event) throws IOException {
         try {
             double amount = Double.parseDouble(amountText.getText());
-            Payment payment = new Payment(amount, "dsa");
+            Payment payment = new Payment(amount, "00");
             Client.getInstance().getBankService().paymentOut(payment);
         } catch (NumberFormatException ignored) {
             resultText.setText("Nieprawidłowa wartość");

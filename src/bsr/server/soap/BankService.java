@@ -4,8 +4,10 @@ import bsr.Constants;
 import bsr.server.exception.NotFound;
 import bsr.server.exception.TooSmallBalance;
 import bsr.server.model.*;
+import bsr.server.rest.TransferService;
 
 import javax.jws.WebService;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -120,6 +122,13 @@ public class BankService implements IBankService {
 
     @Override
     public double transfer(Transfer transfer) throws TooSmallBalance, NotFound {
+        System.out.println(transfer);
+        try {
+            new TransferService().transfer(transfer);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         return 0;
     }
 

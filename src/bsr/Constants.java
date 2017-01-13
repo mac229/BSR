@@ -7,6 +7,8 @@ import bsr.server.soap.BankService;
  */
 public class Constants {
 
+    public static final String EXTERNAL_BANK_ADDRESS = "8080";
+
     public static final String BANK_ENPDOINT = "http://localhost:8888/ws/bank";
     public static final String BANK_ENDPOINT_WSDL = BANK_ENPDOINT + "?wsdl";
 
@@ -18,4 +20,5 @@ public class Constants {
 
     public static final String BANK_CREDENTIALS = "admin:admin";
     public static final long UNDEFINED = -1;
+    public static final String UTF_8 = "UTF-8";
 }

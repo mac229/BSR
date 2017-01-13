@@ -4,6 +4,7 @@ import bsr.client.Client;
 import bsr.server.exception.NotFound;
 import bsr.server.exception.TooSmallBalance;
 import bsr.server.model.Payment;
+import bsr.server.model.Transfer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -50,10 +51,9 @@ public class TransferController {
         }
 
         try {
-
             double amount = Double.parseDouble(amountText.getText());
-            Payment payment = new Payment(amount, "dsa");
-            Client.getInstance().getBankService().paymentOut(payment);
+            Transfer transfer = new Transfer("title", amount, "sender", "receiver");
+            Client.getInstance().getBankService().transfer(transfer);
         } catch (NumberFormatException ignored) {
             resultText.setText("Nieprawidłowa wartość kwoty");
         } catch (NotFound notFound) {
@@ -61,6 +61,8 @@ public class TransferController {
         } catch (TooSmallBalance tooSmallBalance) {
             resultText.setText("Za małe saldo");
         }
+
+
     }
 
     @FXML
