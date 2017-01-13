@@ -30,9 +30,10 @@ public class TransferService {
     }
 
     public void transfer(Transfer transfer) throws IOException {
-        String url = Constants.EXTERNAL_BANK_ADDRESS + "/transfer";
+        String url = Constants.MARCIN + "/transfer";
 
         String data = new Gson().toJson(transfer);
+        System.out.println(data);
 
         HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
         connection.setRequestMethod("POST");

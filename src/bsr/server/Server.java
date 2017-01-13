@@ -19,7 +19,7 @@ public class Server {
     public static void main(String[] args) throws IOException, URISyntaxException {
         Endpoint.publish(Constants.BANK_ENPDOINT, new BankService());
 
-        URI baseUri = UriBuilder.fromUri(Constants.LOCALHOST).port(Constants.REST_PORT).build();
+        URI baseUri = UriBuilder.fromUri(Constants.EXTERNAL).port(Constants.REST_PORT).build();
         MyResourceConfig config = new MyResourceConfig();
         HttpServer httpServer = GrizzlyHttpServerFactory.createHttpServer(baseUri, config);
 

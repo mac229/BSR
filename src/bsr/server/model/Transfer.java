@@ -1,5 +1,7 @@
 package bsr.server.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -13,15 +15,19 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Transfer {
 
     @XmlElement(name = "title")
+    @SerializedName("title")
     private String title;
 
     @XmlElement(name = "amount")
+    @SerializedName("amount")
     private double amount;
 
     @XmlElement(name = "sender_account")
+    @SerializedName("sender_account")
     private String sender;
 
     @XmlElement(name = "receiver_account")
+    @SerializedName("receiver_account")
     private String receiver;
 
     public Transfer() {

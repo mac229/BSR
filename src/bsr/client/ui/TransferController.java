@@ -8,6 +8,7 @@ import bsr.server.model.Transfer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -22,7 +23,7 @@ import java.util.ResourceBundle;
 /**
  * Created by Maciej on 2017-01-02.
  */
-public class TransferController {
+public class TransferController implements Initializable {
 
     @FXML
     private TextField senderText;
@@ -52,7 +53,7 @@ public class TransferController {
 
         try {
             double amount = Double.parseDouble(amountText.getText());
-            Transfer transfer = new Transfer("title", amount, "sender", "receiver");
+            Transfer transfer = new Transfer("title", amount, sender, receiver);
             Client.getInstance().getBankService().transfer(transfer);
         } catch (NumberFormatException ignored) {
             resultText.setText("Nieprawidłowa wartość kwoty");
@@ -76,5 +77,13 @@ public class TransferController {
         Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         appStage.setScene(scene);
         appStage.show();
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        senderText.setText("99001097820000000000000001");
+        receiverText.setText("98001097110000000000000000");
+        titleText.setText("title");
+        amountText.setText("100");
     }
 }

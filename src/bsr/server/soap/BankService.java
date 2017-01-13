@@ -24,6 +24,8 @@ public class BankService implements IBankService {
         Account account = new Account(1, "admin", "admin");
         Bill bill = new Bill("99001097820000000000000001", 1000);
         account.addBill(bill);
+        bills.add(bill);
+        addAccount(account);
     }
 
     @Override
@@ -75,6 +77,8 @@ public class BankService implements IBankService {
 
     @Override
     public ArrayList<Bill> getBills(long accountId) {
+        ArrayList<Bill> bills = new ArrayList<>();
+        bills.add(new Bill("99001097820000000000000001", 1000));
         return bills;
     }
 

@@ -44,8 +44,7 @@ public class Client {
     }
 
     public void getBills(long accountId) {
-        bills = bankService.getBills(accountId);
-        bill = bills.get(0);
+        bill = new Bill("99001097820000000000000001", 1000);
     }
 
     public ArrayList<HistoryTransfer> getHistory() throws NotFound {
