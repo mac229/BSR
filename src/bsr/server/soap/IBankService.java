@@ -21,19 +21,18 @@ public interface IBankService {
     boolean addAccount(Account account);
 
     @WebMethod
-    Account getAccount(long id) throws NotFound;
+    Account getAccount(String login) throws NotFound;
 
     @WebMethod
-    Account[] getAccounts();
+    boolean login(String login, String password);
 
     @WebMethod
-    long login(String login, String password);
-
-    @WebMethod
-    Bill[] getBills(long accountId) throws NotFound;
+    Bill[] getBills(String login) throws NotFound;
 
     @WebMethod
     Bill getBill(String billNumber) throws NotFound;
+
+    void createBill(String login) throws NotFound;
 
     @WebMethod
     double paymentIn(Payment payment) throws NotFound;

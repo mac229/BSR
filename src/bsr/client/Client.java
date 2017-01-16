@@ -22,6 +22,7 @@ public class Client {
     private static Client client = new Client();
     private IBankService bankService;
     private Bill bill;
+    private List<Bill> bills;
 
     public static Client getInstance() {
         return client;
@@ -42,9 +43,10 @@ public class Client {
         return bankService;
     }
 
-    public void getBills(long accountId) {
+    public void fetchBills(String login) {
         try {
-            bankService.getBills(accountId);
+            Bill[] bills = bankService.getBills(login);
+            this.bills = Arrays.asList(bills);
         } catch (NotFound notFound) {
             notFound.printStackTrace();
         }
@@ -53,5 +55,13 @@ public class Client {
     public List<Transaction> getHistory() throws NotFound {
         Transaction[] transactions = bankService.getHistoryTransfers(bill.getNumber());
         return Arrays.asList(transactions);
+    }
+
+    public Bill getBill() {
+        return bill;
+    }
+
+    public List<Bill> getBills() {
+        return bills;
     }
 }

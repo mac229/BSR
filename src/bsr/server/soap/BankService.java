@@ -1,6 +1,5 @@
 package bsr.server.soap;
 
-import bsr.Constants;
 import bsr.server.Data;
 import bsr.server.Utils;
 import bsr.server.exception.NotFound;
@@ -21,14 +20,13 @@ public class BankService implements IBankService {
 
     @Override
     public boolean addAccount(Account account) {
-        Data.getInstance().addAccount(account);
-        return true;
+        return Data.getInstance().addAccount(account);
     }
 
     @Override
-    public Account getAccount(long id) throws NotFound {
+    public Account getAccount(String login) throws NotFound {
         for (Account account : Data.getInstance().getAccounts()) {
-            if (account.getId() == id) {
+            if (account.getLogin().equals(login)) {
                 return account;
             }
         }
@@ -37,26 +35,19 @@ public class BankService implements IBankService {
     }
 
     @Override
-    public Account[] getAccounts() {
-        List<Account> accounts = Data.getInstance().getAccounts();
-        Account[] array = new Account[accounts.size()];
-        return accounts.toArray(array);
-    }
-
-    @Override
-    public long login(String login, String password) {
+    public boolean login(String login, String password) {
         for (Account account : Data.getInstance().getAccounts()) {
             if (login.equals(account.getLogin()) && password.equals(account.getPassword())) {
-                return account.getId();
+                return true;
             }
         }
-        return Constants.UNDEFINED;
+        return false;
     }
 
     @Override
-    public Bill[] getBills(long accountId) throws NotFound {
+    public Bill[] getBills(String login) throws NotFound {
         for (Account account : Data.getInstance().getAccounts()) {
-            if (account.getId() == accountId) {
+            if (account.getLogin().equals(login)) {
                 List<Bill> bills = account.getBills();
                 Bill[] result = new Bill[bills.size()];
                 return bills.toArray(result);
@@ -77,6 +68,13 @@ public class BankService implements IBankService {
         }
 
         throw new NotFound();
+    }
+
+    @Override
+    public void createBill(String login) throws NotFound {
+        Bill bill = Data.getInstance().createBill();
+        Account account = getAccount(login);
+        account.addBill(bill);
     }
 
     @Override
