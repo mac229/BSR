@@ -39,7 +39,8 @@ public class AddAccountController {
         Client client = Client.getInstance();
 
         if (client.getBankService().addAccount(account)) {
-            client.fetchBills(login);
+            client.setLogin(login);
+            client.fetchBills();
             showHome(event);
         } else {
             resultText.setText("Zajęte dane logowania");

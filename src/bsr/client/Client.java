@@ -10,7 +10,6 @@ import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -23,6 +22,7 @@ public class Client {
     private IBankService bankService;
     private Bill bill;
     private List<Bill> bills;
+    private String login;
 
     public static Client getInstance() {
         return client;
@@ -39,11 +39,15 @@ public class Client {
         }
     }
 
-    public IBankService getBankService(){
+    public IBankService getBankService() {
         return bankService;
     }
 
-    public void fetchBills(String login) {
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public void fetchBills() {
         try {
             Bill[] bills = bankService.getBills(login);
             this.bills = Arrays.asList(bills);
@@ -61,7 +65,19 @@ public class Client {
         return bill;
     }
 
+    public void setBill(int index) {
+        this.bill = bills.get(index);
+    }
+
     public List<Bill> getBills() {
         return bills;
+    }
+
+    public void createBill() {
+        try {
+            bankService.createBill(login);
+        } catch (NotFound notFound) {
+            notFound.printStackTrace();
+        }
     }
 }

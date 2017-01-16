@@ -36,7 +36,8 @@ public class LoginController {
 
         Client client = Client.getInstance();
         if (client.getBankService().login(login, password)) {
-            client.fetchBills(login);
+            client.setLogin(login);
+            client.fetchBills();
             showView(event, "home.fxml");
         } else {
             resultText.setText("Nieprawidłowe dane logowania");

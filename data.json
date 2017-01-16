@@ -1,1 +1,1 @@
-{"accounts":[{"id":1,"login":"admin","password":"admin","bills":[{"number":"99001097820000000000000001","balance":1000.0,"transactions":[]}]}],"transactions":[]}
+{"accounts":[{"login":"admin","password":"admin","bills":[{"number":"08001097820000000000000001","balance":0.0,"transactions":[]}]}],"transactions":[],"billsCount":1}
