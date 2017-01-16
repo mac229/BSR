@@ -23,4 +23,6 @@ public class Constants {
     public static final String BANK_CREDENTIALS = "admin:admin";
     public static final long UNDEFINED = -1;
     public static final String UTF_8 = "UTF-8";
+
+    public static final String BANK_ID = "00109782";
 }
