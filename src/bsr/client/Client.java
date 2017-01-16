@@ -13,6 +13,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by Maciej on 2016-12-27.
@@ -44,10 +45,11 @@ public class Client {
     }
 
     public void getBills(long accountId) {
-        bill = new Bill("99001097820000000000000001", 1000);
+        bankService.getBills(accountId);
     }
 
-    public ArrayList<HistoryTransfer> getHistory() throws NotFound {
-        return bankService.getHistoryTransfers(bill.getNumber());
+    public List<HistoryTransfer> getHistory() throws NotFound {
+        HistoryTransfer[] historyTransfers = bankService.getHistoryTransfers(bill.getNumber());
+        return Arrays.asList(historyTransfers);
     }
 }

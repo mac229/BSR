@@ -8,7 +8,10 @@ import bsr.server.rest.TransferService;
 
 import javax.jws.WebService;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Maciej on 2016-12-27.
@@ -76,10 +79,11 @@ public class BankService implements IBankService {
     }
 
     @Override
-    public ArrayList<Bill> getBills(long accountId) {
+    public Bill[] getBills(long accountId) {
         ArrayList<Bill> bills = new ArrayList<>();
         bills.add(new Bill("99001097820000000000000001", 1000));
-        return bills;
+        Bill[] result = new Bill[bills.size()];
+        return bills.toArray(result);
     }
 
     @Override
@@ -137,7 +141,7 @@ public class BankService implements IBankService {
     }
 
     @Override
-    public ArrayList<HistoryTransfer> getHistoryTransfers(String billNumber) throws NotFound {
+    public HistoryTransfer[] getHistoryTransfers(String billNumber) throws NotFound {
         ArrayList<HistoryTransfer> result = new ArrayList<>();
         for (HistoryTransfer transaction : transactions) {
             if (transaction.getBillNumber().equals(billNumber)) {
@@ -145,6 +149,7 @@ public class BankService implements IBankService {
             }
         }
 
-        return result;
+        HistoryTransfer[] array = new HistoryTransfer[result.size()];
+        return result.toArray(array);
     }
 }

@@ -8,7 +8,6 @@ import javax.jws.WebMethod;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.xml.ws.BindingType;
-import java.util.ArrayList;
 
 /**
  * Created by Maciej on 2016-12-27.
@@ -34,7 +33,7 @@ public interface IBankService {
     public long login(String login, String password);
 
     @WebMethod
-    public ArrayList<Bill> getBills(long accountId);
+    public Bill[] getBills(long accountId);
 
     @WebMethod
     public Bill getBill(String billNumber) throws NotFound;
@@ -49,5 +48,5 @@ public interface IBankService {
     public double transfer(Transfer transfer) throws TooSmallBalance, NotFound;
 
     @WebMethod
-    public ArrayList<HistoryTransfer> getHistoryTransfers(String billNumber) throws NotFound;
+    public HistoryTransfer[] getHistoryTransfers(String billNumber) throws NotFound;
 }

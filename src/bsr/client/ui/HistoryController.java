@@ -16,6 +16,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 /**
@@ -29,7 +30,7 @@ public class HistoryController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
-            ArrayList<HistoryTransfer> history = Client.getInstance().getHistory();
+            List<HistoryTransfer> history = Client.getInstance().getHistory();
             for (HistoryTransfer transfer : history) {
                 listView.getItems().addAll(transfer.toString());
             }
