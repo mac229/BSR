@@ -1,6 +1,8 @@
 package bsr.server.soap;
 
 import bsr.Constants;
+import bsr.server.Data;
+import bsr.server.Utils;
 import bsr.server.exception.NotFound;
 import bsr.server.exception.TooSmallBalance;
 import bsr.server.model.*;
@@ -9,9 +11,7 @@ import bsr.server.rest.TransferService;
 import javax.jws.WebService;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.List;
 
 /**
  * Created by Maciej on 2016-12-27.
@@ -19,58 +19,33 @@ import java.util.Set;
 @WebService(endpointInterface = "bsr.server.soap.IBankService")
 public class BankService implements IBankService {
 
-    private static Map<Long, Account> accounts = new HashMap<>();
-    private static ArrayList<Bill> bills = new ArrayList<>();
-    private static ArrayList<Transaction> transactions = new ArrayList<>();
-
-    public BankService() {
-        Account account = new Account(1, "admin", "admin");
-        Bill bill = new Bill("99001097820000000000000001", 1000);
-        account.addBill(bill);
-        bills.add(bill);
-        addAccount(account);
-    }
-
     @Override
     public boolean addAccount(Account account) {
-        if (accounts.get(account.getId()) != null) {
-            return false;
-        }
-
-        accounts.put(account.getId(), account);
+        Data.getInstance().addAccount(account);
         return true;
     }
 
     @Override
-    public boolean deleteAccount(long id) {
-        if (accounts.get(id) == null) {
-            return false;
+    public Account getAccount(long id) throws NotFound {
+        for (Account account : Data.getInstance().getAccounts()) {
+            if (account.getId() == id) {
+                return account;
+            }
         }
 
-        accounts.remove(id);
-        return true;
-    }
-
-    @Override
-    public Account getAccount(long id) {
-        return accounts.get(id);
+        throw new NotFound();
     }
 
     @Override
     public Account[] getAccounts() {
-        Set<Long> ids = accounts.keySet();
-        Account[] result = new Account[ids.size()];
-        int i = 0;
-        for (Long id : ids) {
-            result[i] = accounts.get(id);
-            i++;
-        }
-        return result;
+        List<Account> accounts = Data.getInstance().getAccounts();
+        Account[] array = new Account[accounts.size()];
+        return accounts.toArray(array);
     }
 
     @Override
     public long login(String login, String password) {
-        for (Account account : accounts.values()) {
+        for (Account account : Data.getInstance().getAccounts()) {
             if (login.equals(account.getLogin()) && password.equals(account.getPassword())) {
                 return account.getId();
             }
@@ -79,18 +54,25 @@ public class BankService implements IBankService {
     }
 
     @Override
-    public Bill[] getBills(long accountId) {
-        ArrayList<Bill> bills = new ArrayList<>();
-        bills.add(new Bill("99001097820000000000000001", 1000));
-        Bill[] result = new Bill[bills.size()];
-        return bills.toArray(result);
+    public Bill[] getBills(long accountId) throws NotFound {
+        for (Account account : Data.getInstance().getAccounts()) {
+            if (account.getId() == accountId) {
+                List<Bill> bills = account.getBills();
+                Bill[] result = new Bill[bills.size()];
+                return bills.toArray(result);
+            }
+        }
+
+        throw new NotFound();
     }
 
     @Override
     public Bill getBill(String billNumber) throws NotFound {
-        for (Bill bill : bills) {
-            if (bill.getNumber().equals(billNumber)) {
-                return bill;
+        for (Account account : Data.getInstance().getAccounts()) {
+            for (Bill bill : account.getBills()) {
+                if (bill.getNumber().equals(billNumber)) {
+                    return bill;
+                }
             }
         }
 
@@ -99,33 +81,23 @@ public class BankService implements IBankService {
 
     @Override
     public double paymentIn(Payment payment) throws NotFound {
-        for (Bill bill : bills) {
-            if (bill.getNumber().equals(payment.getBillNumber())) {
-                double newBalance = bill.getBalance() + payment.getAmount();
-                bill.setBalance(newBalance);
-                return newBalance;
-            }
-        }
-
-        throw new NotFound();
+        Bill bill = getBill(payment.getBillNumber());
+        double newBalance = bill.getBalance() + payment.getAmount();
+        bill.setBalance(newBalance);
+        return newBalance;
     }
 
     @Override
     public double paymentOut(Payment payment) throws TooSmallBalance, NotFound {
-        for (Bill bill : bills) {
-            if (bill.getNumber().equals(payment.getBillNumber())) {
-                double balance = bill.getBalance();
-                if (balance - payment.getAmount() < 0) {
-                    throw new TooSmallBalance();
-                } else {
-                    double newBalance = bill.getBalance() - payment.getAmount();
-                    bill.setBalance(newBalance);
-                    return newBalance;
-                }
-            }
+        Bill bill = getBill(payment.getBillNumber());
+        double balance = bill.getBalance();
+        if (balance - payment.getAmount() < 0) {
+            throw new TooSmallBalance();
+        } else {
+            double newBalance = bill.getBalance() - payment.getAmount();
+            bill.setBalance(newBalance);
+            return newBalance;
         }
-
-        throw new NotFound();
     }
 
     @Override
@@ -143,7 +115,7 @@ public class BankService implements IBankService {
     @Override
     public Transaction[] getHistoryTransfers(String billNumber) throws NotFound {
         ArrayList<Transaction> result = new ArrayList<>();
-        for (Transaction transaction : transactions) {
+        for (Transaction transaction : Data.getInstance().getTransactions()) {
             if (transaction.getBillNumber().equals(billNumber)) {
                 result.add(transaction);
             }
@@ -151,5 +123,11 @@ public class BankService implements IBankService {
 
         Transaction[] array = new Transaction[result.size()];
         return result.toArray(array);
+    }
+
+    @Override
+    public void closeSession() {
+        Data data = Data.getInstance();
+        Utils.save(data);
     }
 }

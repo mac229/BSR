@@ -21,7 +21,6 @@ public class Client {
 
     private static Client client = new Client();
     private IBankService bankService;
-    private ArrayList<Bill> bills;
     private Bill bill;
 
     public static Client getInstance() {
@@ -44,7 +43,11 @@ public class Client {
     }
 
     public void getBills(long accountId) {
-        bankService.getBills(accountId);
+        try {
+            bankService.getBills(accountId);
+        } catch (NotFound notFound) {
+            notFound.printStackTrace();
+        }
     }
 
     public List<Transaction> getHistory() throws NotFound {

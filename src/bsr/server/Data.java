@@ -2,7 +2,9 @@ package bsr.server;
 
 import bsr.server.model.Account;
 import bsr.server.model.Bill;
+import bsr.server.model.Transaction;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,10 +12,10 @@ import java.util.List;
  */
 public class Data {
 
-    private static Data instance = new Data();
+    private static Data instance = Utils.getData();
 
-    private List<Account> accounts;
-    private List<Bill> bills;
+    private List<Account> accounts = new ArrayList<>();
+    private List<Transaction> transactions = new ArrayList<>();
 
     public static Data getInstance() {
         return instance;
@@ -23,15 +25,15 @@ public class Data {
         return accounts;
     }
 
-    public List<Bill> getBills() {
-        return bills;
-    }
-
     public void addAccount(Account account) {
         accounts.add(account);
     }
 
-    public void addBill(Bill bill) {
-        bills.add(bill);
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void addTransaction(Transaction transaction) {
+        transactions.add(transaction);
     }
 }

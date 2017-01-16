@@ -18,35 +18,34 @@ import javax.xml.ws.BindingType;
 public interface IBankService {
 
     @WebMethod
-    public boolean addAccount(Account account);
+    boolean addAccount(Account account);
 
     @WebMethod
-    public boolean deleteAccount(long id) throws NotFound;
+    Account getAccount(long id) throws NotFound;
 
     @WebMethod
-    public Account getAccount(long id);
+    Account[] getAccounts();
 
     @WebMethod
-    public Account[] getAccounts();
+    long login(String login, String password);
 
     @WebMethod
-    public long login(String login, String password);
+    Bill[] getBills(long accountId) throws NotFound;
 
     @WebMethod
-    public Bill[] getBills(long accountId);
+    Bill getBill(String billNumber) throws NotFound;
 
     @WebMethod
-    public Bill getBill(String billNumber) throws NotFound;
+    double paymentIn(Payment payment) throws NotFound;
 
     @WebMethod
-    public double paymentIn(Payment payment) throws NotFound;
+    double paymentOut(Payment payment) throws TooSmallBalance, NotFound;
 
     @WebMethod
-    public double paymentOut(Payment payment) throws TooSmallBalance, NotFound;
+    double transfer(Transfer transfer) throws TooSmallBalance, NotFound;
 
     @WebMethod
-    public double transfer(Transfer transfer) throws TooSmallBalance, NotFound;
+    Transaction[] getHistoryTransfers(String billNumber) throws NotFound;
 
-    @WebMethod
-    public Transaction[] getHistoryTransfers(String billNumber) throws NotFound;
+    void closeSession();
 }

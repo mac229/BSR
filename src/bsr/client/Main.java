@@ -30,6 +30,6 @@ public class Main extends Application {
     @Override
     public void stop() throws Exception {
         super.stop();
-        System.out.println("Closing");
+        Client.getInstance().getBankService().closeSession();
     }
 }
