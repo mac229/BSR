@@ -2,9 +2,8 @@ package bsr.client;
 
 import bsr.Constants;
 import bsr.server.exception.NotFound;
-import bsr.server.model.Account;
 import bsr.server.model.Bill;
-import bsr.server.model.HistoryTransfer;
+import bsr.server.model.Transaction;
 import bsr.server.soap.IBankService;
 
 import javax.xml.namespace.QName;
@@ -48,8 +47,8 @@ public class Client {
         bankService.getBills(accountId);
     }
 
-    public List<HistoryTransfer> getHistory() throws NotFound {
-        HistoryTransfer[] historyTransfers = bankService.getHistoryTransfers(bill.getNumber());
-        return Arrays.asList(historyTransfers);
+    public List<Transaction> getHistory() throws NotFound {
+        Transaction[] transactions = bankService.getHistoryTransfers(bill.getNumber());
+        return Arrays.asList(transactions);
     }
 }

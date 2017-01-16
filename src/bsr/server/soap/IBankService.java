@@ -48,5 +48,5 @@ public interface IBankService {
     public double transfer(Transfer transfer) throws TooSmallBalance, NotFound;
 
     @WebMethod
-    public HistoryTransfer[] getHistoryTransfers(String billNumber) throws NotFound;
+    public Transaction[] getHistoryTransfers(String billNumber) throws NotFound;
 }

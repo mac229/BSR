@@ -21,7 +21,7 @@ public class BankService implements IBankService {
 
     private static Map<Long, Account> accounts = new HashMap<>();
     private static ArrayList<Bill> bills = new ArrayList<>();
-    private static ArrayList<HistoryTransfer> transactions = new ArrayList<>();
+    private static ArrayList<Transaction> transactions = new ArrayList<>();
 
     public BankService() {
         Account account = new Account(1, "admin", "admin");
@@ -141,15 +141,15 @@ public class BankService implements IBankService {
     }
 
     @Override
-    public HistoryTransfer[] getHistoryTransfers(String billNumber) throws NotFound {
-        ArrayList<HistoryTransfer> result = new ArrayList<>();
-        for (HistoryTransfer transaction : transactions) {
+    public Transaction[] getHistoryTransfers(String billNumber) throws NotFound {
+        ArrayList<Transaction> result = new ArrayList<>();
+        for (Transaction transaction : transactions) {
             if (transaction.getBillNumber().equals(billNumber)) {
                 result.add(transaction);
             }
         }
 
-        HistoryTransfer[] array = new HistoryTransfer[result.size()];
+        Transaction[] array = new Transaction[result.size()];
         return result.toArray(array);
     }
 }

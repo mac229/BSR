@@ -10,7 +10,7 @@ public class Bill {
 
     private String number;
     private double balance;
-    private List<HistoryTransfer> historyTransfers = new ArrayList<>();
+    private List<Transaction> transactions = new ArrayList<>();
 
     public Bill() {
     }
@@ -36,15 +36,15 @@ public class Bill {
         this.balance = balance;
     }
 
-    public List<HistoryTransfer> getHistoryTransfers() {
-        return historyTransfers;
+    public List<Transaction> getTransactions() {
+        return transactions;
     }
 
-    public void setHistoryTransfers(List<HistoryTransfer> historyTransfers) {
-        this.historyTransfers = historyTransfers;
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
     }
 
-    public void addHistoryTransfers(HistoryTransfer historyTransfer) {
-        historyTransfers.add(historyTransfer);
+    public void addHistoryTransfers(Transaction transaction) {
+        transactions.add(transaction);
     }
 }
