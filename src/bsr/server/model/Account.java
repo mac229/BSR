@@ -8,7 +8,6 @@ import java.util.List;
  */
 public class Account {
 
-    private long id;
     private String login;
     private String password;
     private List<Bill> bills = new ArrayList<>();
@@ -17,18 +16,9 @@ public class Account {
 
     }
 
-    public Account(long id, String login, String password) {
-        this.id = id;
+    public Account(String login, String password) {
         this.login = login;
         this.password = password;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getLogin() {
@@ -60,9 +50,25 @@ public class Account {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Account account = (Account) o;
+
+        if (login != null ? !login.equals(account.login) : account.login != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return login != null ? login.hashCode() : 0;
+    }
+
+    @Override
     public String toString() {
-        return "id=" + id +
-                ", login='" + login + '\'' +
+        return "login='" + login + '\'' +
                 ", password='" + password + '\'' +
                 ", bills=" + bills;
     }

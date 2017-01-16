@@ -35,18 +35,21 @@ public class LoginController {
         String password = passwordText.getText();
 
         Client client = Client.getInstance();
-        long accountId = client.getBankService().login(login, password);
-        client.getBills(accountId);
-
-        if (accountId >= 0) {
-            showHome(event);
+        if (client.getBankService().login(login, password)) {
+            client.fetchBills(login);
+            showView(event, "home.fxml");
         } else {
             resultText.setText("Nieprawidłowe dane logowania");
         }
     }
 
-    private void showHome(ActionEvent event) throws IOException {
-        Parent view = FXMLLoader.load(getClass().getResource("../fxml/home.fxml"));
+    @FXML
+    protected void onAddAccountClick(ActionEvent event) throws IOException {
+        showView(event, "add_account.fxml");
+    }
+
+    private void showView(ActionEvent event, String fxml) throws IOException {
+        Parent view = FXMLLoader.load(getClass().getResource("../fxml/" + fxml));
         Scene scene = new Scene(view);
         Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         appStage.setScene(scene);

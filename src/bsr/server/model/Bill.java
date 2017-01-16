@@ -15,9 +15,8 @@ public class Bill {
     public Bill() {
     }
 
-    public Bill(String number, double balance) {
+    public Bill(String number) {
         this.number = number;
-        this.balance = balance;
     }
 
     public String getNumber() {
@@ -46,5 +45,27 @@ public class Bill {
 
     public void addHistoryTransfers(Transaction transaction) {
         transactions.add(transaction);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Bill bill = (Bill) o;
+
+        if (number != null ? !number.equals(bill.number) : bill.number != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return number != null ? number.hashCode() : 0;
+    }
+
+    @Override
+    public String toString() {
+        return number;
     }
 }
