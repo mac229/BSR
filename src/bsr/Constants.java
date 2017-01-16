@@ -10,14 +10,12 @@ public class Constants {
     public static final String EXTERNAL_BANK_ADDRESS = "8088";
 
     public static final String SOAP_PORT = "8081";
+    public static final int REST_PORT = 8080;
+
     public static final String BANK_ENPDOINT = "http://localhost:" + SOAP_PORT + "/ws/bank";
     public static final String BANK_ENDPOINT_WSDL = BANK_ENPDOINT + "?wsdl";
 
-    public static final String LOCALHOST = "http://localhost/";
     public static final String EXTERNAL = "http://0.0.0.0/";
-    public static final String MY = "http:/150.254.131.77";
-    public static final String MARCIN = "http://150.254.131.79:8088";
-    public static final int REST_PORT = 8080;
 
     public static final String NAMESPACE_URI = "http://soap.server.bsr/";
     public static final String PERSON_SERVICE_NAME = BankService.class.getSimpleName() + "Service";

@@ -1,6 +1,8 @@
 package bsr.server.rest;
 
 import bsr.Constants;
+import bsr.server.Utils;
+import bsr.server.model.Config;
 import bsr.server.model.Transfer;
 import com.google.gson.Gson;
 import org.glassfish.jersey.internal.util.Base64;
@@ -22,7 +24,6 @@ import java.net.URL;
 @Path("/transfer")
 public class TransferService {
 
-    // This method is called if XMLis request
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Transfer getTransfer() {
@@ -30,7 +31,8 @@ public class TransferService {
     }
 
     public void transfer(Transfer transfer) throws IOException {
-        String url = Constants.MARCIN + "/transfer";
+        Config config = Utils.getConfig();
+        String url = config.getExternalBankAddress() + "/transfer";
 
         String data = new Gson().toJson(transfer);
         System.out.println(data);
@@ -40,7 +42,7 @@ public class TransferService {
         connection.setDoOutput(true);
         connection.setRequestProperty("Accept-Charset", Constants.UTF_8);
         connection.setRequestProperty("Content-Type", "application/json;charset=" + Constants.UTF_8);
-        connection.setRequestProperty("Authorization", "Basic " + Base64.encodeAsString(Constants.BANK_CREDENTIALS));
+        connection.setRequestProperty("Authorization", "Basic " + Base64.encodeAsString(config.getCredentials()));
 
         OutputStream requestBody = connection.getOutputStream();
         requestBody.write(data.getBytes(Constants.UTF_8));
