@@ -1,6 +1,7 @@
 package bsr.server;
 
 import bsr.Constants;
+import com.google.gson.Gson;
 import org.glassfish.jersey.internal.util.Base64;
 
 import javax.ws.rs.WebApplicationException;
@@ -19,15 +20,17 @@ public class BasicAuth implements ContainerRequestFilter {
     public void filter(ContainerRequestContext containerRequestContext) throws IOException {
         String auth = containerRequestContext.getHeaderString("Authorization");
         if (auth == null) {
-            throw new WebApplicationException(Response.status(Response.Status.UNAUTHORIZED)
-                    .entity("TODO ERROR - missing auth").build());
+            Error error = new Error("Missing auth");
+            String json = new Gson().toJson(error);
+            throw new WebApplicationException(Response.status(Response.Status.UNAUTHORIZED).entity(json).build());
         }
 
         String base64auth = auth.replace("Basic ", "");
         String credentials = Base64.decodeAsString(base64auth);
         if (!Constants.BANK_CREDENTIALS.equals(credentials)) {
-            throw new WebApplicationException(Response.status(Response.Status.UNAUTHORIZED)
-                    .entity("TODO ERROR - wrong credentials").build());
+            Error error = new Error("Bad auth");
+            String json = new Gson().toJson(error);
+            throw new WebApplicationException(Response.status(Response.Status.UNAUTHORIZED).entity(json).build());
         }
     }
 }

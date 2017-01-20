@@ -1,6 +1,9 @@
 package bsr.server;
 
-import org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider;
+import bsr.server.providers.MyJsonMappingException;
+import bsr.server.providers.MyJsonProcessingException;
+import bsr.server.providers.MyUnrecognizedPropertyException;
+import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 import org.glassfish.jersey.server.ResourceConfig;
 
 /**
@@ -12,5 +15,8 @@ public class MyResourceConfig extends ResourceConfig {
         packages("bsr.server.rest");
         register(JacksonJaxbJsonProvider.class);
         register(BasicAuth.class);
+        register(MyUnrecognizedPropertyException.class);
+        register(MyJsonMappingException.class);
+        register(MyJsonProcessingException.class);
     }
 }
