@@ -53,12 +53,12 @@ public class Data {
 
     private String rest(long billsCount) {
         String string = String.valueOf(billsCount);
-        StringBuffer outputBuffer = new StringBuffer(16);
+        StringBuilder stringBuilder = new StringBuilder(16);
         for (int i = string.length(); i < 16; i++) {
-            outputBuffer.append("0");
+            stringBuilder.append("0");
         }
-        outputBuffer.append(billsCount);
-        return outputBuffer.toString();
+        stringBuilder.append(billsCount);
+        return stringBuilder.toString();
     }
 
     public List<Transaction> getTransactions() {
