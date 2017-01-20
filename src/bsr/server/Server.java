@@ -1,6 +1,7 @@
 package bsr.server;
 
 import bsr.Constants;
+import bsr.server.model.Config;
 import bsr.server.soap.BankService;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
@@ -24,5 +25,7 @@ public class Server {
         HttpServer httpServer = GrizzlyHttpServerFactory.createHttpServer(baseUri, config);
 
         httpServer.start();
+
+        System.out.println(Utils.getConfig().getAddresses().get("00109782"));
     }
 }

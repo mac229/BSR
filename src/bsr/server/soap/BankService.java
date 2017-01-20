@@ -115,12 +115,23 @@ public class BankService implements IBankService {
     }
 
     private void makeInternalTransfer(Transfer transfer) throws NotFound, TooSmallBalance {
-        double amount = transfer.getAmount();
-        paymentOut(new Payment(amount, transfer.getSender()));
-        paymentIn(new Payment(amount, transfer.getReceiver()));
+        double amount = (double) transfer.getAmount() / 100;
 
-        //Transaction transaction = new Transaction(transfer.getTitle(), transfer.getAmount(), "Transfer", 1000, transfer.getSender(), transfer.getReceiver());
-        //Data.getInstance().addTransaction(transaction);
+        Bill billSender = getBill(transfer.getSender());
+        double balance = billSender.getBalance();
+        if (balance - amount < 0) {
+            throw new TooSmallBalance();
+        }
+
+        Bill billReceiver = getBill(transfer.getReceiver());
+        double newBalance = billReceiver.getBalance() + amount;
+        billReceiver.setBalance(newBalance);
+
+        double newBalanceS = billSender.getBalance() - amount;
+        billSender.setBalance(newBalanceS);
+        Transaction transaction = new Transaction(transfer.getTitle(), amount, "Transfer", newBalanceS, transfer.getSender());
+
+        Data.getInstance().addTransaction(transaction);
     }
 
     private void makeExternalTransfer(Transfer transfer) throws IOException {

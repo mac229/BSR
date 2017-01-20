@@ -78,8 +78,16 @@ public class TransferController implements Initializable, ChangeListener<Number>
             return;
         }
 
+        if (bill.getNumber().equals(receiver)) {
+            resultText.setText("Te same numery konta");
+            return;
+        }
+
         try {
             double amount = Double.parseDouble(amountText.getText());
+            if (amount < 0.01) {
+                throw new NumberFormatException();
+            }
             Transfer transfer = new Transfer(title, (int) (amount * 100), bill.getNumber(), receiver);
             Client.getInstance().getBankService().transfer(transfer);
             resultText.setText("Przelew zaakceptowano.");

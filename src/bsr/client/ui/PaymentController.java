@@ -32,6 +32,9 @@ public class PaymentController {
     protected void onPaymentOutClick(ActionEvent event) throws IOException {
         try {
             double amount = Double.parseDouble(amountText.getText());
+            if (amount < 0.01) {
+                throw new NumberFormatException();
+            }
             Client client = Client.getInstance();
             Payment payment = new Payment(amount, client.getBill().getNumber());
             client.getBankService().paymentOut(payment);
@@ -48,6 +51,9 @@ public class PaymentController {
     protected void onPaymentInClick(ActionEvent event) throws IOException {
         try {
             double amount = Double.parseDouble(amountText.getText());
+            if (amount < 0.01) {
+                throw new NumberFormatException();
+            }
             Client client = Client.getInstance();
             Payment payment = new Payment(amount, client.getBill().getNumber());
             Client.getInstance().getBankService().paymentIn(payment);

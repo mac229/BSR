@@ -49,8 +49,9 @@ public class TransferService {
     }
 
     public void transfer(Transfer transfer) throws IOException {
+        String bankId = transfer.getReceiver().substring(2, 10);
         Config config = Utils.getConfig();
-        String url = config.getExternalBankAddress() + "/transfer";
+        String url = config.getAddresses().get(bankId) + "/transfer";
 
         String data = new Gson().toJson(transfer);
         System.out.println(data);
