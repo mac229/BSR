@@ -83,6 +83,8 @@ public class BankService implements IBankService {
         Bill bill = getBill(payment.getBillNumber());
         double newBalance = bill.getBalance() + payment.getAmount();
         bill.setBalance(newBalance);
+        Transaction transaction = new Transaction("Wpłata na konto", payment.getAmount(), "Wpłata", newBalance, payment.getBillNumber());
+        Data.getInstance().addTransaction(transaction);
         return newBalance;
     }
 
@@ -95,6 +97,8 @@ public class BankService implements IBankService {
         } else {
             double newBalance = bill.getBalance() - payment.getAmount();
             bill.setBalance(newBalance);
+            Transaction transaction = new Transaction("Wypłata z konta", payment.getAmount(), "Wypłata", newBalance, payment.getBillNumber());
+            Data.getInstance().addTransaction(transaction);
             return newBalance;
         }
     }
@@ -114,6 +118,9 @@ public class BankService implements IBankService {
         double amount = transfer.getAmount();
         paymentOut(new Payment(amount, transfer.getSender()));
         paymentIn(new Payment(amount, transfer.getReceiver()));
+
+        //Transaction transaction = new Transaction(transfer.getTitle(), transfer.getAmount(), "Transfer", 1000, transfer.getSender(), transfer.getReceiver());
+        //Data.getInstance().addTransaction(transaction);
     }
 
     private void makeExternalTransfer(Transfer transfer) throws IOException {

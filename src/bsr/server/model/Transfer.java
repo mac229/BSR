@@ -20,7 +20,7 @@ public class Transfer {
 
     @XmlElement(name = "amount")
     @SerializedName("amount")
-    private double amount;
+    private int amount;
 
     @XmlElement(name = "sender_account")
     @SerializedName("sender_account")
@@ -33,7 +33,7 @@ public class Transfer {
     public Transfer() {
     }
 
-    public Transfer(String title, double amount, String sender, String receiver) {
+    public Transfer(String title, int amount, String sender, String receiver) {
         this.title = title;
         this.amount = amount;
         this.sender = sender;
@@ -48,11 +48,11 @@ public class Transfer {
         this.title = title;
     }
 
-    public double getAmount() {
+    public int getAmount() {
         return amount;
     }
 
-    public void setAmount(double amount) {
+    public void setAmount(int amount) {
         this.amount = amount;
     }
 

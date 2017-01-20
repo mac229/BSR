@@ -80,7 +80,7 @@ public class TransferController implements Initializable, ChangeListener<Number>
 
         try {
             double amount = Double.parseDouble(amountText.getText());
-            Transfer transfer = new Transfer(title, amount, bill.getNumber(), receiver);
+            Transfer transfer = new Transfer(title, (int) (amount * 100), bill.getNumber(), receiver);
             Client.getInstance().getBankService().transfer(transfer);
             resultText.setText("Przelew zaakceptowano.");
         } catch (NumberFormatException ignored) {
