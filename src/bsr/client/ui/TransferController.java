@@ -3,8 +3,10 @@ package bsr.client.ui;
 import bsr.client.Client;
 import bsr.server.exception.NotFound;
 import bsr.server.exception.TooSmallBalance;
-import bsr.server.model.Payment;
+import bsr.server.model.Bill;
 import bsr.server.model.Transfer;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,6 +14,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -23,10 +26,11 @@ import java.util.ResourceBundle;
 /**
  * Created by Maciej on 2017-01-02.
  */
-public class TransferController implements Initializable {
+public class TransferController implements Initializable, ChangeListener<Number> {
 
+    public static final int BILL_NUMBER_LENGTH = 26;
     @FXML
-    private TextField senderText;
+    private ChoiceBox<Bill> billsChoiceBox;
 
     @FXML
     private TextField receiverText;
@@ -40,30 +44,54 @@ public class TransferController implements Initializable {
     @FXML
     private Text resultText;
 
+    private Bill bill;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        receiverText.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(final ObservableValue<? extends String> ov, final String oldValue, final String newValue) {
+                if (receiverText.getText().length() > BILL_NUMBER_LENGTH) {
+                    String s = receiverText.getText().substring(0, BILL_NUMBER_LENGTH);
+                    receiverText.setText(s);
+                }
+            }
+        });
+        refresh();
+        billsChoiceBox.getSelectionModel().selectedIndexProperty().addListener(this);
+    }
+
+    private void refresh() {
+        billsChoiceBox.getItems().clear();
+        Client client = Client.getInstance();
+        client.fetchBills();
+        billsChoiceBox.getItems().addAll(client.getBills());
+    }
+
     @FXML
     public void onTransferClick(ActionEvent event) {
-        String sender = senderText.getText();
         String receiver = receiverText.getText();
         String title = titleText.getText();
 
-        if (sender.isEmpty() || receiver.isEmpty() || title.isEmpty()) {
-            resultText.setText("Pola nie mogą być puste");
+        if (bill == null) {
+            resultText.setText("Wybierz swój rachunek");
             return;
         }
 
         try {
             double amount = Double.parseDouble(amountText.getText());
-            Transfer transfer = new Transfer("title", amount, sender, receiver);
+            Transfer transfer = new Transfer(title, amount, bill.getNumber(), receiver);
             Client.getInstance().getBankService().transfer(transfer);
+            resultText.setText("Przelew zaakceptowano.");
         } catch (NumberFormatException ignored) {
             resultText.setText("Nieprawidłowa wartość kwoty");
         } catch (NotFound notFound) {
             resultText.setText("Nie znaleziono konta");
         } catch (TooSmallBalance tooSmallBalance) {
             resultText.setText("Za małe saldo");
+        } catch (IOException e) {
+            resultText.setText("Brak Internetu");
         }
-
-
     }
 
     @FXML
@@ -80,10 +108,8 @@ public class TransferController implements Initializable {
     }
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        senderText.setText("99001097820000000000000001");
-        receiverText.setText("98001097110000000000000000");
-        titleText.setText("title");
-        amountText.setText("100");
+    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+        Client.getInstance().setBill(newValue.intValue());
+        bill = Client.getInstance().getBill();
     }
 }

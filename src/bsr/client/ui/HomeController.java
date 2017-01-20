@@ -12,7 +12,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ListView;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -27,6 +27,9 @@ public class HomeController implements Initializable, ChangeListener<Number> {
     @FXML
     private ChoiceBox<Bill> billsChoiceBox;
 
+    @FXML
+    private Label balanceLabel;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         refresh();
@@ -35,7 +38,9 @@ public class HomeController implements Initializable, ChangeListener<Number> {
 
     private void refresh() {
         billsChoiceBox.getItems().clear();
-        billsChoiceBox.getItems().addAll(Client.getInstance().getBills());
+        Client client = Client.getInstance();
+        client.fetchBills();
+        billsChoiceBox.getItems().addAll(client.getBills());
     }
 
     @FXML
@@ -72,5 +77,7 @@ public class HomeController implements Initializable, ChangeListener<Number> {
     @Override
     public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
         Client.getInstance().setBill(newValue.intValue());
+        Bill bill = Client.getInstance().getBill();
+        balanceLabel.setText(String.valueOf(bill == null ? "" : bill.getBalance() + " PLN"));
     }
 }

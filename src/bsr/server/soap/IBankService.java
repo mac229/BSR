@@ -8,6 +8,7 @@ import javax.jws.WebMethod;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.xml.ws.BindingType;
+import java.io.IOException;
 
 /**
  * Created by Maciej on 2016-12-27.
@@ -41,7 +42,7 @@ public interface IBankService {
     double paymentOut(Payment payment) throws TooSmallBalance, NotFound;
 
     @WebMethod
-    double transfer(Transfer transfer) throws TooSmallBalance, NotFound;
+    void transfer(Transfer transfer) throws TooSmallBalance, NotFound, IOException;
 
     @WebMethod
     Transaction[] getHistoryTransfers(String billNumber) throws NotFound;

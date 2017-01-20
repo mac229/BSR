@@ -1,5 +1,6 @@
 package bsr.server.soap;
 
+import bsr.Constants;
 import bsr.server.Data;
 import bsr.server.Utils;
 import bsr.server.exception.NotFound;
@@ -99,15 +100,24 @@ public class BankService implements IBankService {
     }
 
     @Override
-    public double transfer(Transfer transfer) throws TooSmallBalance, NotFound {
+    public void transfer(Transfer transfer) throws TooSmallBalance, NotFound, IOException {
         System.out.println(transfer);
-        try {
-            new TransferService().transfer(transfer);
-        } catch (IOException e) {
-            e.printStackTrace();
+        String bankId = transfer.getReceiver().substring(2,10);
+        if (Constants.BANK_ID.equals(bankId)) {
+            makeInternalTransfer(transfer);
+        } else {
+            makeExternalTransfer(transfer);
         }
+    }
 
-        return 0;
+    private void makeInternalTransfer(Transfer transfer) throws NotFound, TooSmallBalance {
+        double amount = transfer.getAmount();
+        paymentOut(new Payment(amount, transfer.getSender()));
+        paymentIn(new Payment(amount, transfer.getReceiver()));
+    }
+
+    private void makeExternalTransfer(Transfer transfer) throws IOException {
+        new TransferService().transfer(transfer);
     }
 
     @Override

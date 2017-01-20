@@ -1,17 +1,21 @@
 package bsr.server.rest;
 
 import bsr.Constants;
+import bsr.server.Data;
 import bsr.server.Utils;
+import bsr.server.exception.NotFound;
 import bsr.server.model.Config;
+import bsr.server.model.Error;
+import bsr.server.model.Payment;
 import bsr.server.model.Transfer;
+import bsr.server.soap.BankService;
 import com.google.gson.Gson;
 import org.glassfish.jersey.internal.util.Base64;
 import sun.misc.IOUtils;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -24,10 +28,24 @@ import java.net.URL;
 @Path("/transfer")
 public class TransferService {
 
-    @GET
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Transfer getTransfer() {
-        return new Transfer("title", 100, "sender", "receiver");
+    public Response getTransfer(Transfer transfer) {
+        Data data = Data.getInstance();
+        Gson gson = new Gson();
+
+        Payment payment = new Payment(transfer.getAmount(), transfer.getReceiver());
+        try {
+            new BankService().paymentIn(payment);
+        } catch (NotFound notFound) {
+            Error error = new Error("Invalid bill number");
+            String json = gson.toJson(error);
+            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND).entity(json).build());
+        }
+        Utils.save(data);
+
+        return Response.created(null).build();
     }
 
     public void transfer(Transfer transfer) throws IOException {

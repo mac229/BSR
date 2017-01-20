@@ -32,8 +32,9 @@ public class PaymentController {
     protected void onPaymentOutClick(ActionEvent event) throws IOException {
         try {
             double amount = Double.parseDouble(amountText.getText());
-            Payment payment = new Payment(amount, "00");
-            Client.getInstance().getBankService().paymentOut(payment);
+            Client client = Client.getInstance();
+            Payment payment = new Payment(amount, client.getBill().getNumber());
+            client.getBankService().paymentOut(payment);
         } catch (NumberFormatException ignored) {
             resultText.setText("Nieprawidłowa wartość");
         } catch (NotFound notFound) {
@@ -47,7 +48,8 @@ public class PaymentController {
     protected void onPaymentInClick(ActionEvent event) throws IOException {
         try {
             double amount = Double.parseDouble(amountText.getText());
-            Payment payment = new Payment(amount, "dsa");
+            Client client = Client.getInstance();
+            Payment payment = new Payment(amount, client.getBill().getNumber());
             Client.getInstance().getBankService().paymentIn(payment);
         } catch (NumberFormatException ignored) {
             resultText.setText("Nieprawidłowa wartość");
